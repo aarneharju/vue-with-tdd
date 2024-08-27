@@ -1,4 +1,44 @@
-<script></script>
+<script setup> // setup = composition api
+  import { ref } from "vue";
+  let buttonDisabled = ref(true);
+  let password = ref("");
+  let repeatPassword = ref(""); 
+  const onChangePassword = (event) => {
+    if (event.target.id === "password") {
+      password.value = event.target.value;
+    }
+    
+    if (event.target.id === "repeat-password") {
+      repeatPassword.value = event.target.value;
+    }
+    buttonDisabled.value = password.value !== repeatPassword.value || password.value === "" || repeatPassword.value === "";
+  };
+</script>
+
+<!-- <script> // no setup = options api
+  export default {
+    data() {
+      return {
+        buttonDisabled: true,
+        password: "",
+        repeatPassword: "",
+      }
+    },
+    methods: {
+      onChangePassword(event) {
+        if (event.target.id === "password") {
+          this.password = event.target.value;
+        }
+      
+        if (event.target.id === "repeat-password") {
+          this.repeatPassword = event.target.value;
+        }
+        this.buttonDisabled = this.password !== this.repeatPassword;
+      }
+    }
+  }
+</script> -->
+
 <template>
   <h1>Sign Up</h1>
   <form>
@@ -8,17 +48,17 @@
     </div>
     <div>
       <label for="email" hidden>Email:</label>
-      <input type="text" id="email" placeholder="Email"></input>
+      <input type="email" id="email" placeholder="Email"></input>
     </div>
     <div>
       <label for="password" hidden>Password:</label>
-      <input type="password" id="password" placeholder="Password"></input>
+      <input type="password" id="password" placeholder="Password" @input="onChangePassword"></input>
     </div>
     <div>
       <label for="repeat-password" hidden>Repeat password:</label>
-      <input type="password" id="repeat-password" placeholder="Repeat password"></input>
+      <input type="password" id="repeat-password" placeholder="Repeat password" @input="onChangePassword"></input> <!-- v-on -> @ -->
     </div>
-    <button type="submit" disabled>Sign up</button>
+    <button type="submit" :disabled="buttonDisabled">Sign up</button> <!-- v-bind -> : -->
   </form>
 </template>
 <style></style>

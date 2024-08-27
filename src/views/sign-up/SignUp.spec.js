@@ -1,4 +1,6 @@
+import { expect } from "vitest";
 import SignUp from "./SignUp.vue";
+import userEvent from "@testing-library/user-event";
 
 const { render, screen } = require("@testing-library/vue");
 
@@ -28,8 +30,8 @@ describe("Sign up page tests", () => {
 
   it("has password type for repeat password input", () => {
     render(SignUp);
-    const inputPasswordElement = screen.getByLabelText(/repeat password/i);
-    expect(inputPasswordElement).toHaveAttribute("type", "password");
+    const inputRepeatPasswordElement = screen.getByLabelText(/repeat password/i);
+    expect(inputRepeatPasswordElement).toHaveAttribute("type", "password");
   });
 
   it("has a sign up button", () => {
@@ -41,5 +43,18 @@ describe("Sign up page tests", () => {
     render(SignUp);
     const buttonElement = screen.getByRole("button", { name: /Sign up/i });
     expect(buttonElement).toBeDisabled();
+  });
+
+  describe("when user sets same value for password inputs", () => {
+    it("enables button", async () => {
+      const user = userEvent.setup();
+      render(SignUp);
+      const inputPasswordElement = screen.getByLabelText(/^password/i);
+      const inputRepeatPasswordElement = screen.getByLabelText(/repeat password/i);
+      const buttonElement = screen.getByRole("button", { name: /Sign up/i });
+      await user.type(inputPasswordElement, "password");
+      await user.type(inputRepeatPasswordElement, "password");
+      expect(buttonElement).toBeEnabled();
+    });
   });
 });
