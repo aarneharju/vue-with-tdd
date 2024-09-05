@@ -12,21 +12,17 @@
   export default {
     data() {
       return {
-        buttonDisabled: true,
         password: "",
         repeatPassword: "",
       }
     },
     methods: {
-      onChangePassword(event) {
-        if (event.target.id === "password") {
-          this.password = event.target.value;
-        }
-      
-        if (event.target.id === "repeat-password") {
-          this.repeatPassword = event.target.value;
-        }
-        this.buttonDisabled = this.password !== this.repeatPassword;
+    },
+    computed: {
+      isDisabled() {
+        return (
+          this.password || this.repeatPassword ? this.password !== this.repeatPassword : true
+      )
       }
     }
   }
