@@ -2,15 +2,6 @@
   import { ref } from "vue";
   let password = ref("");
   let repeatPassword = ref(""); 
-  const onChangePassword = (event) => {
-    if (event.target.id === "password") {
-      password.value = event.target.value;
-    }
-    
-    if (event.target.id === "repeat-password") {
-      repeatPassword.value = event.target.value;
-    }
-  };
 
   const isDisabled = () => {
     return password.value || repeatPassword.value ? password.value !== repeatPassword.value : true;
@@ -54,11 +45,11 @@
     </div>
     <div>
       <label for="password" hidden>Password:</label>
-      <input type="password" id="password" placeholder="Password" @input="onChangePassword"></input>
+      <input type="password" id="password" placeholder="Password" v-model="password"></input>
     </div>
     <div>
       <label for="repeat-password" hidden>Repeat password:</label>
-      <input type="password" id="repeat-password" placeholder="Repeat password" @input="onChangePassword"></input> <!-- v-on -> @ -->
+      <input type="password" id="repeat-password" placeholder="Repeat password" v-model="repeatPassword"></input> <!-- v-on -> @ -->
     </div>
     <button type="submit" :disabled="isDisabled()">Sign up</button> <!-- v-bind -> : -->
   </form>
