@@ -1,11 +1,11 @@
 <script setup> // setup = composition api
-  import { ref } from "vue";
+  import { ref, computed } from "vue";
   let password = ref("");
   let repeatPassword = ref(""); 
 
-  const isDisabled = () => {
+  const isDisabled = computed(() => {
     return password.value || repeatPassword.value ? password.value !== repeatPassword.value : true;
-  }
+  })
 </script>
 
 <!-- <script> // no setup = options api
@@ -51,7 +51,7 @@
       <label for="repeat-password" hidden>Repeat password:</label>
       <input type="password" id="repeat-password" placeholder="Repeat password" v-model="repeatPassword"></input> <!-- v-on -> @ -->
     </div>
-    <button type="submit" :disabled="isDisabled()">Sign up</button> <!-- v-bind -> : -->
+    <button type="submit" :disabled="isDisabled">Sign up</button> <!-- v-bind -> : -->
   </form>
 </template>
 <style></style>
