@@ -1,6 +1,5 @@
 <script setup> // setup = composition api
   import { ref } from "vue";
-  let buttonDisabled = ref(true);
   let password = ref("");
   let repeatPassword = ref(""); 
   const onChangePassword = (event) => {
@@ -11,8 +10,11 @@
     if (event.target.id === "repeat-password") {
       repeatPassword.value = event.target.value;
     }
-    buttonDisabled.value = password.value !== repeatPassword.value || password.value === "" || repeatPassword.value === "";
   };
+
+  const isDisabled = () => {
+    return password.value || repeatPassword.value ? password.value !== repeatPassword.value : true;
+  }
 </script>
 
 <!-- <script> // no setup = options api
@@ -58,7 +60,7 @@
       <label for="repeat-password" hidden>Repeat password:</label>
       <input type="password" id="repeat-password" placeholder="Repeat password" @input="onChangePassword"></input> <!-- v-on -> @ -->
     </div>
-    <button type="submit" :disabled="buttonDisabled">Sign up</button> <!-- v-bind -> : -->
+    <button type="submit" :disabled="isDisabled()">Sign up</button> <!-- v-bind -> : -->
   </form>
 </template>
 <style></style>
