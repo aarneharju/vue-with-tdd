@@ -1,6 +1,8 @@
-import { expect } from "vitest";
+vi.mock("axios");
+import { describe, expect } from "vitest";
 import SignUp from "./SignUp.vue";
 import userEvent from "@testing-library/user-event";
+import axios from "axios";
 
 const { render, screen } = require("@testing-library/vue");
 
@@ -55,6 +57,28 @@ describe("Sign up page tests", () => {
       await user.type(inputPasswordElement, "password");
       await user.type(inputRepeatPasswordElement, "password");
       expect(buttonElement).toBeEnabled();
+    });
+  });
+
+  describe("when user submits sign up form", () => {
+    it("sends username, email address and password to the backend", async () => {
+      const user = userEvent.setup();
+      render(SignUp);
+      const inputUsernameElement = screen.getByLabelText(/username/i);
+      const inputEmailElement = screen.getByLabelText(/email/i);
+      const inputPasswordElement = screen.getByLabelText(/^password/i);
+      const inputRepeatPasswordElement = screen.getByLabelText(/repeat password/i);
+      const buttonElement = screen.getByRole("button", { name: /sign up/i });
+      await user.type(inputUsernameElement, "user");
+      await user.type(inputEmailElement, "email@address.com");
+      await user.type(inputPasswordElement, "password");
+      await user.type(inputRepeatPasswordElement, "password");
+      await user.click(buttonElement);
+      expect(axios.post).toHaveBeenCalledWith("/api/v1/users", {
+        username: "user",
+        email: "email@address.com",
+        password: "password"
+      });
     });
   });
 });
